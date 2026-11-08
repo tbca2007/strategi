@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math-Ventures: Logistik Nusantara (Co-op Co-op LMS)</title>
+    <style>
+        :root {
+            --primary: #059669;
+            --primary-dark: #047857;
+            --secondary: #2563eb;
+            --dark: #1e293b;
+            --light: #ffffff;
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --accent: #d97706;
+            --danger: #dc2626;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .bg-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+            top: 0;
+            left: 0;
+        }
+
+        .particle {
+            position: absolute;
+            display: block;
+            list-style: none;
+            width: 20px;
+            height: 20px;
+            background: rgba(5, 150, 105, 0.1);
+            animation: animate 25s linear infinite;
+            bottom: -150px;
+            border-radius: 50%;
+        }
+
+        .particle:nth-child(1) { left: 10%; width: 40px; height: 40px; animation-duration: 15s; }
+        .particle:nth-child(2) { left: 30%; width: 20px; height: 20px; animation-duration: 12s; animation-delay: 2s; }
+        .particle:nth-child(3) { left: 70%; width: 50px; height: 50px; animation-duration: 18s; animation-delay: 4s; }
+
+        @keyframes animate {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; }
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 900px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 2px solid #e2e8f0;
+            z-index: 1;
+        }
+
+        .screen {
+            display: none;
+            padding: 35px;
+            text-align: center;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .mascot-img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid var(--primary);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            margin-bottom: 10px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+
+        h1 {
+            font-size: 2.1rem;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+
+        .lore-box {
+            background: #f8fafc;
+            border-left: 4px solid var(--accent);
+            padding: 15px 20px;
+            text-align: left;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            color: #334155;
+            border-top: 1px solid #e2e8f0;
+            border-right: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .island-case-box {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-left: 4px solid var(--primary);
+            padding: 15px 20px;
+            text-align: left;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+            color: #166534;
+        }
+
+        .island-case-box h4 {
+            color: var(--primary-dark);
+            margin-bottom: 6px;
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: #64748b;
+        }
+        .btn-secondary:hover {
+            background-color: #475569;
+        }
+
+        .btn-accent {
+            background-color: var(--accent);
+        }
+        .btn-accent:hover {
+            background-color: #b45309;
+        }
+
+        .group-select-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .group-card {
+            background: #f8fafc;
+            border: 2px solid #cbd5e1;
+            padding: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .group-card:hover {
+            border-color: var(--primary);
+            background: #f0fdf4;
+            transform: scale(1.03);
+        }
+
+        .group-card h3 {
+            color: var(--secondary);
+            margin-bottom: 5px;
+        }
+
+        .workspace-container {
+            text-align: left;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 20px;
+        }
+
+        .workspace-container h3 {
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+        }
+
+        textarea, input[type="text"] {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            font-size: 0.95rem;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        /* Modal Pop-up Video */
+        #video-modal, #fail-video-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            flex-direction: column;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        #video-modal.active, #fail-video-modal.active {
+            display: flex;
+        }
+
+        .video-box {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 16px;
+            border: 2px solid #334155;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .video-box h2 {
+            color: #38bdf8;
+            margin-bottom: 15px;
+        }
+
+        .video-box.fail h2 {
+            color: #f87171;
+        }
+
+        video {
+            width: 100%;
+            border-radius: 10px;
+            outline: none;
+            max-height: 350px;
+        }
+
+        #presentation-screen {
+            background: #0f172a;
+            color: #ffffff;
+            min-height: 100vh;
+            width: 100vw;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+            padding: 40px;
+            display: none;
+            overflow-y: auto;
+        }
+
+        #presentation-screen.active {
+            display: block;
+        }
+
+        .pres-card {
+            background: #1e293b;
+            border: 2px solid #334155;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .pres-card h3 {
+            color: #38bdf8;
+            margin-bottom: 10px;
+        }
+
+        .rubric-box {
+            background: #334155;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+
+        .qa-list {
+            margin-top: 10px;
+            max-height: 100px;
+            overflow-y: auto;
+            background: #1e293b;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #475569;
+            font-size: 0.85rem;
+            color: #cbd5e1;
+        }
+    </style>
+</head>
+<body>
+
+    <ul class="bg-particles">
+        <li class="particle"></li>
+        <li class="particle"></li>
+        <li class="particle"></li>
+    </ul>
+
+<div class="game-container">
+
+    <!-- 1. DASHBOARD KELOMPOK & STUDI KASUS PULAU -->
+    <div id="home-screen" class="screen active">
+        <img src="Ali.jpg" alt="Maskot Kapten" class="mascot-img" onerror="this.src='image_2.png'">
+        <h1>Math-Ventures LMS</h1>
+        <div class="subtitle">Platform Co-op Co-op (Studi Kasus Logistik Pulau Terpencil)</div>
+        
+        <div class="lore-box">
+            <strong>Panduan Co-op Co-op:</strong> Pilih kelompokmu untuk mengatur pembagian sub-tugas anggota, menyusun rangkuman investigasi, dan bersiap untuk Mode Presentasi Kelas.
+        </div>
+
+        <div class="island-case-box">
+            <h4>🏝️ Studi Kasus Misi: Ekspedisi Logistik Pulau Terpencil</h4>
+            <p>Kapten kapal ditugaskan mendistribusikan bantuan ke 3 posko di pulau terpencil dengan tantangan berbeda:</p>
+            <ul style="margin-left: 20px; margin-top: 5px;">
+                <li><strong>Pos 1 (Kelompok 1 - Pola Bilangan):</strong> Membuka gerbang dermaga dengan kode numerik teratur.</li>
+                <li><strong>Pos 2 (Kelompok 2 - Barisan Aritmatika):</strong> Menghitung tumpukan karung muatan di setiap geladak kapal.</li>
+                <li><strong>Pos 3 (Kelompok 3 - Pecahan):</strong> Membagikan hasil tani beras secara adil kepada warga lokal.</li>
+            </ul>
+        </div>
+
+        <div class="group-select-grid">
+            <div class="group-card" onclick="playSound('click'); selectGroup(1)">
+                <h3>Kelompok 1</h3>
+                <p>Topik Besar: <strong>Pola Bilangan</strong></p>
+            </div>
+            <div class="group-card" onclick="playSound('click'); selectGroup(2)">
+                <h3>Kelompok 2</h3>
+                <p>Topik Besar: <strong>Barisan Aritmatika</strong></p>
+            </div>
+            <div class="group-card" onclick="playSound('click'); selectGroup(3)">
+                <h3>Kelompok 3</h3>
+                <p>Topik Besar: <strong>Pecahan</strong></p>
+            </div>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <button class="btn btn-accent" onclick="playSound('click'); openPresentationMode()">🖥️ Buka Mode Presentasi Kelas & Peer Evaluation</button>
+        </div>
+    </div>
+
+    <!-- 2. RUANG KERJA KELOMPOK -->
+    <div id="workspace-screen" class="screen">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 15px;">
+            <h2 id="ws-title" style="color: var(--primary);">Dashboard Kelompok</h2>
+            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.85rem;" onclick="playSound('click'); showScreen('home-screen')">Ganti Kelompok</button>
+        </div>
+
+        <div class="workspace-container">
+            <h3 id="ws-mat-title">📖 Ringkasan Topik Besar</h3>
+            <p id="ws-mat-desc" style="font-size: 0.95rem; color: #334155; line-height: 1.5;"></p>
+        </div>
+
+        <div class="workspace-container" style="border-left: 4px solid var(--secondary);">
+            <h3>👥 Pembagian Sub-Topik Anggota (8 Orang / Kelompok)</h3>
+            <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 10px;">Tulis pembagian sub-tugas spesifik untuk masing-masing anggota sebelum disatukan:</p>
+            <textarea id="subtopic-notes" placeholder="Contoh: 
+- Anggota 1-2: Riset konsep dasar & definisi materi
+- Anggota 3-5: Menelaah rumus & menyusun contoh soal mini
+- Anggota 6-8: Desain presentasi & uji coba game"></textarea>
+            <button class="btn btn-secondary" style="padding: 6px 14px; font-size: 0.85rem;" onclick="playSound('click'); saveSubtopics()">Simpan Pembagian Sub-Topik</button>
+            <span id="subtopic-status" style="margin-left: 10px; font-size: 0.85rem; color: var(--primary); font-weight: bold;"></span>
+        </div>
+
+        <div class="workspace-container">
+            <h3>📝 Rangkuman Hasil Investigasi Bersama</h3>
+            <textarea id="group-notes" placeholder="Gabungkan hasil temuan sub-topik seluruh anggota menjadi rangkuman final kelompok di sini..."></textarea>
+            <button class="btn" style="padding: 8px 16px; font-size: 0.9rem;" onclick="playSound('click'); saveNotes()">💾 Simpan Rangkuman Final</button>
+            <span id="save-status" style="margin-left: 10px; font-size: 0.85rem; color: var(--primary); font-weight: bold;"></span>
+        </div>
+
+        <div class="workspace-container">
+            <h3 id="ws-quest-title">🎮 Pos Tantangan Game</h3>
+            <p id="ws-quest-desc" style="margin-bottom: 15px; color: #334155;"></p>
+            
+            <div style="display: flex; gap: 10px; justify-content: center; align-items: center;">
+                <input type="number" id="user-answer" placeholder="Masukkan jawaban..." style="padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; width: 180px; text-align: center;">
+                <button class="btn" onclick="checkAnswer()">Kirim Jawaban</button>
+            </div>
+            <div id="feedback" style="margin-top: 15px; font-weight: bold; min-height: 24px;"></div>
+        </div>
+
+        <div>
+            <button class="btn btn-accent" onclick="playSound('click'); openPresentationMode()">🖥️ Masuk Mode Presentasi Kelas</button>
+        </div>
+    </div>
+
+</div>
+
+<!-- MODAL POP-UP VIDEO KEMENANGAN (video_1.mp4) -->
+<div id="video-modal">
+    <div class="video-box">
+        <h2>🎉 Hore! Berhasil Menjawab!</h2>
+        <video id="celebration-video" controls autoplay>
+            <source src="video_1.mp4" type="video/mp4">
+            Browser Anda tidak mendukung pemutaran video.
+        </video>
+        <div style="margin-top: 15px;">
+            <button class="btn" onclick="closeVideoModal()">Lanjutkan Petualangan</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL POP-UP VIDEO KEGAGALAN (video_2.mp4) -->
+<div id="fail-video-modal">
+    <div class="video-box fail">
+        <h2>❌ Gagal Dijemput di Pulau!</h2>
+        <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 12px;">Kapal penyelamat gagal menjemputmu karena jawaban salah.</p>
+        <video id="fail-video" controls autoplay>
+            <source src="video_2.mp4" type="video/mp4">
+            Browser Anda tidak mendukung pemutaran video.
+        </video>
+        <div style="margin-top: 15px;">
+            <button class="btn btn-secondary" onclick="closeFailVideoModal()">Coba Jawab Lagi</button>
+        </div>
+    </div>
+</div>
+
+<!-- 3. MODE PRESENTASI KELAS & RUBRIK PENILAIAN -->
+<div id="presentation-screen">
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #334155; padding-bottom: 15px; margin-bottom: 25px;">
+        <h2>🖥️ Layar Presentasi Kelas & Penilaian Antar-Kelompok</h2>
+        <button class="btn btn-secondary" onclick="playSound('click'); closePresentationMode()">Keluar Mode Presentasi</button>
+    </div>
+
+    <!-- KELOMPOK 1 -->
+    <div class="pres-card">
+        <h3>Kelompok 1: Materi Pola Bilangan</h3>
+        <p><strong>Pembagian Sub-Topik Anggota:</strong></p>
+        <p id="pres-sub-1" style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 8px; font-style: italic;">(Belum diisi)</p>
+        <p><strong>Rangkuman Investigasi Final:</strong></p>
+        <p id="pres-notes-1" style="color: #cbd5e1; margin-top: 5px; font-style: italic;">(Belum ada rangkuman final disimpan)</p>
+        
+        <div class="rubric-box">
+            <p><strong>⭐ Rubrik Penilaian Antar-Kelompok:</strong> Berikan nilai bintang (1-5) & komentar untuk Kelompok 1</p>
+            <div style="margin: 8px 0;">
+                Nilai Bintang: 
+                <select id="rate-1" style="padding: 4px 8px; border-radius: 4px;">
+                    <option value="5">⭐⭐⭐⭐⭐ (Sangat Baik)</option>
+                    <option value="4">⭐⭐⭐⭐ (Baik)</option>
+                    <option value="3">⭐⭐⭐ (Cukup)</option>
+                </select>
+                <button class="btn" style="padding: 4px 10px; font-size: 0.8rem; margin-left: 10px;" onclick="submitRating(1)">Beri Nilai</button>
+                <span id="score-display-1" style="margin-left: 10px; color: #38bdf8; font-weight: bold;">Rata-rata: Belum ada nilai</span>
+            </div>
+            <div class="qa-list" id="qa-container-1">
+                <div><em>Belum ada catatan evaluasi untuk kelompok ini.</em></div>
+            </div>
+            <div style="display: flex; gap: 8px; margin-top: 8px;">
+                <input type="text" id="qa-input-1" placeholder="Tulis tanggapan atau evaluasi untuk Kelompok 1...">
+                <button class="btn" style="padding: 6px 12px; font-size: 0.85rem;" onclick="addPeerComment(1)">Kirim Evaluasi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- KELOMPOK 2 -->
+    <div class="pres-card">
+        <h3>Kelompok 2: Materi Barisan Aritmatika</h3>
+        <p><strong>Pembagian Sub-Topik Anggota:</strong></p>
+        <p id="pres-sub-2" style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 8px; font-style: italic;">(Belum diisi)</p>
+        <p><strong>Rangkuman Investigasi Final:</strong></p>
+        <p id="pres-notes-2" style="color: #cbd5e1; margin-top: 5px; font-style: italic;">(Belum ada rangkuman final disimpan)</p>
+        
+        <div class="rubric-box">
+            <p><strong>⭐ Rubrik Penilaian Antar-Kelompok:</strong> Berikan nilai bintang (1-5) & komentar untuk Kelompok 2</p>
+            <div style="margin: 8px 0;">
+                Nilai Bintang: 
+                <select id="rate-2" style="padding: 4px 8px; border-radius: 4px;">
+                    <option value="5">⭐⭐⭐⭐⭐ (Sangat Baik)</option>
+                    <option value="4">⭐⭐⭐⭐ (Baik)</option>
+                    <option value="3">⭐⭐⭐ (Cukup)</option>
+                </select>
+                <button class="btn" style="padding: 4px 10px; font-size: 0.8rem; margin-left: 10px;" onclick="submitRating(2)">Beri Nilai</button>
+                <span id="score-display-2" style="margin-left: 10px; color: #38bdf8; font-weight: bold;">Rata-rata: Belum ada nilai</span>
+            </div>
+            <div class="qa-list" id="qa-container-2">
+                <div><em>Belum ada catatan evaluasi untuk kelompok ini.</em></div>
+            </div>
+            <div style="display: flex; gap: 8px; margin-top: 8px;">
+                <input type="text" id="qa-input-2" placeholder="Tulis tanggapan atau evaluasi untuk Kelompok 2...">
+                <button class="btn" style="padding: 6px 12px; font-size: 0.85rem;" onclick="addPeerComment(2)">Kirim Evaluasi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- KELOMPOK 3 -->
+    <div class="pres-card">
+        <h3>Kelompok 3: Materi Pecahan</h3>
+        <p><strong>Pembagian Sub-Topik Anggota:</strong></p>
+        <p id="pres-sub-3" style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 8px; font-style: italic;">(Belum diisi)</p>
+        <p><strong>Rangkuman Investigasi Final:</strong></p>
+        <p id="pres-notes-3" style="color: #cbd5e1; margin-top: 5px; font-style: italic;">(Belum ada rangkuman final disimpan)</p>
+        
+        <div class="rubric-box">
+            <p><strong>⭐ Rubrik Penilaian Antar-Kelompok:</strong> Berikan nilai bintang (1-5) & komentar untuk Kelompok 3</p>
+            <div style="margin: 8px 0;">
+                Nilai Bintang: 
+                <select id="rate-3" style="padding: 4px 8px; border-radius: 4px;">
+                    <option value="5">⭐⭐⭐⭐⭐ (Sangat Baik)</option>
+                    <option value="4">⭐⭐⭐⭐ (Baik)</option>
+                    <option value="3">⭐⭐⭐ (Cukup)</option>
+                </select>
+                <button class="btn" style="padding: 4px 10px; font-size: 0.8rem; margin-left: 10px;" onclick="submitRating(3)">Beri Nilai</button>
+                <span id="score-display-3" style="margin-left: 10px; color: #38bdf8; font-weight: bold;">Rata-rata: Belum ada nilai</span>
+            </div>
+            <div class="qa-list" id="qa-container-3">
+                <div><em>Belum ada catatan evaluasi untuk kelompok ini.</em></div>
+            </div>
+            <div style="display: flex; gap: 8px; margin-top: 8px;">
+                <input type="text" id="qa-input-3" placeholder="Tulis tanggapan atau evaluasi untuk Kelompok 3...">
+                <button class="btn" style="padding: 6px 12px; font-size: 0.85rem;" onclick="addPeerComment(3)">Kirim Evaluasi</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playSound(type) {
+        if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        let now = audioCtx.currentTime;
+
+        if (type === 'click') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(400, now);
+            osc.frequency.exponentialRampToValueAtTime(200, now + 0.08);
+            gainNode.gain.setValueAtTime(0.15, now);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+            osc.start(now); osc.stop(now + 0.08);
+        } else if (type === 'correct') {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(300, now);
+            osc.frequency.setValueAtTime(450, now + 0.1);
+            osc.frequency.setValueAtTime(600, now + 0.2);
+            gainNode.gain.setValueAtTime(0.2, now);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+            osc.start(now); osc.stop(now + 0.35);
+        } else if (type === 'wrong') {
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(250, now);
+            osc.frequency.exponentialRampToValueAtTime(120, now + 0.25);
+            gainNode.gain.setValueAtTime(0.2, now);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+            osc.start(now); osc.stop(now + 0.25);
+        }
+    }
+
+    let activeGroup = 1;
+
+    const groupData = {
+        1: {
+            title: "Dashboard Kelompok 1: Pola Bilangan",
+            matTitle: "📖 Materi: Pola Bilangan",
+            matDesc: "Pola bilangan adalah susunan angka dengan keteraturan tertentu. Contoh: 2, 4, 6, 8 memiliki aturan selalu ditambah 2.",
+            questDesc: "Pulau pertama memiliki kode kedatangan logistik: 2, 4, 6, 8, ... Berapakah angka selanjutnya pada urutan ke-5?",
+            answer: 10
+        },
+        2: {
+            title: "Dashboard Kelompok 2: Barisan Aritmatika",
+            matTitle: "📖 Materi: Barisan Aritmatika",
+            matDesc: "Barisan aritmatika adalah barisan bilangan dengan beda (b) tetap antar suku berurutan. Rumus: U_n = a + (n - 1)b.",
+            questDesc: "Geladak kapal memuat karung sembako secara berurutan: 5, 9, 13, ... Berapa banyak karung pada geladak ke-5?",
+            answer: 21
+        },
+        3: {
+            title: "Dashboard Kelompok 3: Pecahan",
+            matTitle: "📖 Materi: Operasi Pecahan",
+            matDesc: "Pecahan terdiri dari pembilang dan penyebut. Untuk menjumlahkan, pastikan penyebut sudah sama lalu jumlahkan pembilangnya.",
+            questDesc: "Kapten memiliki 3/4 ton beras di gudang, lalu mendapatkan kiriman 1/4 ton lagi. Berapa total ton beras (3/4 + 1/4)?",
+            answer: 1
+        }
+    };
+
+    function showScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(screenId).classList.add('active');
+    }
+
+    function selectGroup(groupId) {
+        activeGroup = groupId;
+        const data = groupData[groupId];
+
+        document.getElementById('ws-title').innerText = data.title;
+        document.getElementById('ws-mat-title').innerText = data.matTitle;
+        document.getElementById('ws-mat-desc').innerText = data.matDesc;
+        document.getElementById('ws-quest-desc').innerText = data.questDesc;
+        document.getElementById('feedback').innerText = '';
+        document.getElementById('user-answer').value = '';
+
+        document.getElementById('subtopic-notes').value = localStorage.getItem('subtopic_group_' + groupId) || '';
+        document.getElementById('group-notes').value = localStorage.getItem('notes_group_' + groupId) || '';
+        document.getElementById('subtopic-status').innerText = '';
+        document.getElementById('save-status').innerText = '';
+
+        showScreen('workspace-screen');
+    }
+
+    function saveSubtopics() {
+        playSound('click');
+        const sub = document.getElementById('subtopic-notes').value;
+        localStorage.setItem('subtopic_group_' + activeGroup, sub);
+        updatePresentationData();
+
+        const status = document.getElementById('subtopic-status');
+        status.innerText = "✓ Sub-topik tersimpan!";
+        setTimeout(() => { status.innerText = ""; }, 2000);
+    }
+
+    function saveNotes() {
+        playSound('click');
+        const notes = document.getElementById('group-notes').value;
+        localStorage.setItem('notes_group_' + activeGroup, notes);
+        updatePresentationData();
+
+        const status = document.getElementById('save-status');
+        status.innerText = "✓ Rangkuman final tersimpan!";
+        setTimeout(() => { status.innerText = ""; }, 2000);
+    }
+
+    function updatePresentationData() {
+        for(let i=1; i<=3; i++) {
+            const subSaved = localStorage.getItem('subtopic_group_' + i);
+            const subEl = document.getElementById('pres-sub-' + i);
+            if (subSaved && subSaved.trim() !== "") {
+                subEl.innerText = subSaved;
+                subEl.style.fontStyle = "normal";
+                subEl.style.color = "#cbd5e1";
+            }
+
+            const notesSaved = localStorage.getItem('notes_group_' + i);
+            const notesEl = document.getElementById('pres-notes-' + i);
+            if (notesSaved && notesSaved.trim() !== "") {
+                notesEl.innerText = notesSaved;
+                notesEl.style.fontStyle = "normal";
+                notesEl.style.color = "#e2e8f0";
+            }
+        }
+    }
+
+    function checkAnswer() {
+        playSound('click');
+        const userAns = parseFloat(document.getElementById('user-answer').value);
+        const correctAns = groupData[activeGroup].answer;
+        const feedback = document.getElementById('feedback');
+
+        if (isNaN(userAns)) {
+            feedback.style.color = "var(--accent)";
+            feedback.innerText = "⚠️ Harap masukkan angka yang valid!";
+            return;
+        }
+
+        if (userAns === correctAns) {
+            playSound('correct');
+            feedback.style.color = "var(--primary)";
+            feedback.innerText = "🎉 Benar! Memuat animasi selebrasi...";
+            setTimeout(() => { showVideoModal(); }, 600);
+        } else {
+            playSound('wrong');
+            feedback.style.color = "var(--danger)";
+            feedback.innerText = "❌ Kurang tepat. Kapal gagal menjemput di pulau!";
+            setTimeout(() => { showFailVideoModal(); }, 600);
+        }
+    }
+
+    function showVideoModal() {
+        const modal = document.getElementById('video-modal');
+        const video = document.getElementById('celebration-video');
+        modal.classList.add('active');
+        video.currentTime = 0;
+        video.play();
+    }
+
+    function closeVideoModal() {
+        const modal = document.getElementById('video-modal');
+        const video = document.getElementById('celebration-video');
+        video.pause();
+        modal.classList.remove('active');
+    }
+
+    function showFailVideoModal() {
+        const modal = document.getElementById('fail-video-modal');
+        const video = document.getElementById('fail-video');
+        modal.classList.add('active');
+        video.currentTime = 0;
+        video.play();
+    }
+
+    function closeFailVideoModal() {
+        const modal = document.getElementById('fail-video-modal');
+        const video = document.getElementById('fail-video');
+        video.pause();
+        modal.classList.remove('active');
+    }
+
+    function openPresentationMode() {
+        updatePresentationData();
+        document.getElementById('presentation-screen').classList.add('active');
+    }
+
+    function closePresentationMode() {
+        document.getElementById('presentation-screen').classList.remove('active');
+    }
+
+    let groupRatings = { 1: [], 2: [], 3: [] };
+    let groupComments = { 1: [], 2: [], 3: [] };
+
+    function submitRating(groupId) {
+        playSound('click');
+        const val = parseInt(document.getElementById('rate-' + groupId).value);
+        groupRatings[groupId].push(val);
+
+        const sum = groupRatings[groupId].reduce((a, b) => a + b, 0);
+        const avg = (sum / groupRatings[groupId].length).toFixed(1);
+
+        document.getElementById('score-display-' + groupId).innerText = `Rata-rata: ⭐ ${avg} / 5.0 (${groupRatings[groupId].length} Penilai)`;
+    }
+
+    function addPeerComment(groupId) {
+        playSound('click');
+        const input = document.getElementById('qa-input-' + groupId);
+        const val = input.value.trim();
+        if(val === "") return;
+
+        groupComments[groupId].push(val);
+        input.value = "";
+        renderPeerComments(groupId);
+    }
+
+    function renderPeerComments(groupId) {
+        const container = document.getElementById('qa-container-' + groupId);
+        const list = groupComments[groupId];
+        if(list.length === 0) {
+            container.innerHTML = "<div><em>Belum ada catatan evaluasi untuk kelompok ini.</em></div>";
+            return;
+        }
+        let html = "";
+        list.forEach((c, idx) => {
+            html += `<div style="margin-bottom: 5px; border-bottom: 1px dashed #475569; padding-bottom: 3px;"><strong>Evaluator ${idx+1}:</strong> ${c}</div>`;
+        });
+        container.innerHTML = html;
+    }
+</script>
+
+</body>
+</html>
